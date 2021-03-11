@@ -36,46 +36,46 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void setResultAddArray(String result) {
-        addResArr.setText(result);
+        runOnUiThread(() -> addResArr.setText(result));
     }
 
     @Override
     public void setResultAddLinked(String result) {
-        addResLink.setText(result);
+        runOnUiThread(() -> addResLink.setText(result));
     }
 
     @Override
     public void setResultAddCopy(String result) {
-        addResCopy.setText(result);
+        runOnUiThread(() -> addResCopy.setText(result));
     }
 
     @Override
     public void setResultRemoveArray(String result) {
-        remResArr.setText(result);
+        runOnUiThread(() -> remResArr.setText(result));
     }
 
     @Override
     public void setResultRemoveLinked(String result) {
-        remResLink.setText(result);
+        runOnUiThread(() -> remResLink.setText(result));
     }
 
     @Override
     public void setResultRemoveCopy(String result) {
-        remResCopy.setText(result);
+        runOnUiThread(() -> remResCopy.setText(result));
     }
 
     @Override
     public void setResultSearchArray(String result) {
-        searchResArr.setText(result);
+        runOnUiThread(() -> searchResArr.setText(result));
     }
 
     @Override
     public void setResultSearchLinked(String result) {
-        searchResLink.setText(result);
+        runOnUiThread(() -> searchResLink.setText(result));
     }
 
     @Override
     public void setResultSearchCopy(String result) {
-        searchResCopy.setText(result);
+        runOnUiThread(() -> searchResCopy.setText(result));
     }
 }

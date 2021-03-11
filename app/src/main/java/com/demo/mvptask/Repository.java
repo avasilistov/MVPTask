@@ -12,12 +12,17 @@ import java.util.concurrent.Executors;
 
 public class Repository implements MainContract.Repository {
     private final MainContract.Presenter callback;
-    private ExecutorService executor = Executors.newFixedThreadPool(5);
+    private ExecutorService executor;
 
     public Repository(MainContract.Presenter callback) {
         this.callback = callback;
     }
 
+    @Override
+    public void onStartExecutor(){
+        executor = Executors.newFixedThreadPool(4);
+//        executor = Executors.newCachedThreadPool();
+    }
 
     private String getAddTime(List<Integer> list) {
         Long start = System.currentTimeMillis();
@@ -85,81 +90,69 @@ public class Repository implements MainContract.Repository {
 
     @Override
     public void calculateAddArray() {
-        executor.execute(() -> {
-            callback.setResultAddArray(getAddTime(makeList(1)));
-        });
+        executor.execute(() -> callback.setResultAddArray(getAddTime(makeList(1))));
+
 
     }
 
 
     @Override
     public void calculateAddLinked() {
-        executor.execute(() -> {
-            callback.setResultAddLinked(getAddTime(makeList(2)));
-        });
+        executor.execute(() -> callback.setResultAddLinked(getAddTime(makeList(2))));
+
 
     }
 
     @Override
     public void calculateAddCopy() {
-        executor.execute(() -> {
-            callback.setResultAddCopy(getAddTime(makeList(3)));
-        });
+        executor.execute(() -> callback.setResultAddCopy(getAddTime(makeList(3))));
+
 
     }
 
     @Override
     public void calculateRemoveArray() {
-        executor.execute(() -> {
-            callback.setResultRemoveArray(getRemTime(makeList(1)));
-        });
+        executor.execute(() -> callback.setResultRemoveArray(getRemTime(makeList(1))));
+
 
     }
 
     @Override
     public void calculateRemoveLinked() {
-        executor.execute(() -> {
-            callback.setResultRemoveLinked(getRemTime(makeList(2)));
-        });
+        executor.execute(() -> callback.setResultRemoveLinked(getRemTime(makeList(2))));
+
 
     }
 
     @Override
     public void calculateRemoveCopy() {
-        executor.execute(() -> {
-            callback.setResultRemoveCopy(getRemTime(makeList(3)));
-        });
+        executor.execute(() -> callback.setResultRemoveCopy(getRemTime(makeList(3))));
+
 
     }
 
     @Override
     public void calculateSearchArray() {
-        executor.execute(() -> {
-            callback.setResultSearchArray(getSearchTime(makeList(1)));
-        });
+        executor.execute(() -> callback.setResultSearchArray(getSearchTime(makeList(1))));
+
 
     }
 
     @Override
     public void calculateSearchLinked() {
-        executor.execute(() -> {
-            callback.setResultSearchLinked(getSearchTime(makeList(2)));
-        });
+        executor.execute(() -> callback.setResultSearchLinked(getSearchTime(makeList(2))));
+
 
     }
 
     @Override
     public void calculateSearchCopy() {
-        executor.execute(this::run);
+        executor.execute(() -> callback.setResultSearchCopy(getSearchTime(makeList(3))));
 
     }
 
     @Override
     public void onDestroy() {
         executor.shutdown();
-    }
-
-    private void run() {
-        callback.setResultSearchCopy(getSearchTime(makeList(3)));
     }
 }

@@ -11,6 +11,16 @@ public class Presenter implements MainContract.Presenter, MainContract.Callback 
 
     @Override
     public void calculate() {
+        setResultAddArray("");
+        setResultAddLinked("");
+        setResultAddCopy("");
+        setResultRemoveArray("");
+        setResultRemoveLinked("");
+        setResultRemoveCopy("");
+        setResultSearchArray("");
+        setResultSearchLinked("");
+        setResultSearchCopy("");
+        repository.onStartExecutor();
         repository.calculateAddArray();
         repository.calculateAddLinked();
         repository.calculateAddCopy();
@@ -23,6 +33,8 @@ public class Presenter implements MainContract.Presenter, MainContract.Callback 
         repository.onDestroy();
 
     }
+
+
 
     @Override
     public void setResultAddArray(String result) {

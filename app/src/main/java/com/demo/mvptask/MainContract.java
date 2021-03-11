@@ -48,6 +48,8 @@ public interface MainContract {
 
         void setResultSearchCopy(String result);
 
+
+
     }
 
     interface Repository {
@@ -69,6 +71,8 @@ public interface MainContract {
         void calculateSearchLinked();
 
         void calculateSearchCopy();
+
+        void onStartExecutor();
 
         void onDestroy();
     }
