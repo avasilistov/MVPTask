@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">MVPTask</string>
+    <string name="calculate">Calculate</string>
+    <string name="table">Table</string>
+    <string name="arraylist">ArrayList</string>
+    <string name="linkedlist">LinkedList</string>
+    <string name="copyonwritearraylist">CopyOnWriteArrayList</string>
+    <string name="addmid">AddMid</string>
+    <string name="removemid">RemoveMid</string>
+    <string name="search">Search</string>
+</resources>
