@@ -3,9 +3,9 @@ package com.demo.mvptask;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,22 +18,19 @@ public class Repository implements MainContract.Repository {
         this.callback = callback;
     }
 
-    @Override
-    public void onStartExecutor(){
-        executor = Executors.newFixedThreadPool(4);
-//        executor = Executors.newCachedThreadPool();
-    }
 
-    private String getAddTime(List<Integer> list) {
+    // Get addMid operation time
+    private String getAddTime(List<Byte> list) {
         Long start = System.currentTimeMillis();
-        list.add(Math.round(list.size() / 2), 1);
+        list.add(Math.round(list.size() / 2), (byte) 1);
         Long end = System.currentTimeMillis() - start;
         String result = end + " ms";
         Log.i("getTime", list.getClass().toString() + " " + result);
         return result;
     }
 
-    private String getRemTime(List<Integer> list) {
+    // Get removeMid operation time
+    private String getRemoveTime(List<Byte> list) {
         Long start = System.currentTimeMillis();
         list.remove(Math.round(list.size() / 2));
         Long end = System.currentTimeMillis() - start;
@@ -42,117 +39,77 @@ public class Repository implements MainContract.Repository {
         return result;
     }
 
-    private String getSearchTime(List<Integer> list) {
+    // Get search operation time
+    private String getSearchTime(List<Byte> list) {
 
         Long start = System.currentTimeMillis();
-        list.indexOf(1);
+        list.indexOf(10);
         Long end = System.currentTimeMillis() - start;
         String result = end + " ms";
-        Log.i("getTime", list.getClass().toString() + " remove " + result);
         return result;
     }
 
-    private List<Integer> makeList(int num) {
-        List<Integer> list;
-
-        switch (num) {
+    // Make the required list
+    private List<Byte> makeList(int listKind) {
+        List<Byte> list;
+        int size = 5000000;
+        switch (listKind) {
+            case 0:
+                list = new ArrayList<>(Collections.nCopies(size, (byte) 1));
+                break;
             case 1:
-                list = new ArrayList<>();
+                list = new LinkedList<>(Collections.nCopies(size, (byte) 1));
                 break;
             case 2:
-                list = new LinkedList<>();
-                break;
-            case 3:
-                list = new ArrayList<>();
+                list = new CopyOnWriteArrayList<>(Collections.nCopies(size, (byte) 1));
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + num);
+                throw new IllegalStateException("Unexpected value: " + listKind);
         }
-
-//        Random random = new Random();
-
-        int size = 10000000;
-        for (int i = 0; i < size; i++) {
-
-            if (i == Math.round(size / 2)) {
-                list.add(1);
-            } else list.add(0);
-
-
-        }
-        if (num == 3) {
-            list = new CopyOnWriteArrayList<>(list);
-        }
-        Log.i("getTime", list.getClass().toString() + " created ");
+        list.set(Math.round(size / 2), (byte) 10);
         return list;
     }
 
-
     @Override
-    public void calculateAddArray() {
-        executor.execute(() -> callback.setResultAddArray(getAddTime(makeList(1))));
+    public void calculate() {
+        executor = Executors.newFixedThreadPool(9);
+        for (int operationKind = 0; operationKind < 3; operationKind++) {
+            for (int listKind = 0; listKind < 3; listKind++) {
+                executor.execute(new Calculator(operationKind, listKind));
+            }
 
-
-    }
-
-
-    @Override
-    public void calculateAddLinked() {
-        executor.execute(() -> callback.setResultAddLinked(getAddTime(makeList(2))));
-
-
-    }
-
-    @Override
-    public void calculateAddCopy() {
-        executor.execute(() -> callback.setResultAddCopy(getAddTime(makeList(3))));
-
-
-    }
-
-    @Override
-    public void calculateRemoveArray() {
-        executor.execute(() -> callback.setResultRemoveArray(getRemTime(makeList(1))));
-
-
-    }
-
-    @Override
-    public void calculateRemoveLinked() {
-        executor.execute(() -> callback.setResultRemoveLinked(getRemTime(makeList(2))));
-
-
-    }
-
-    @Override
-    public void calculateRemoveCopy() {
-        executor.execute(() -> callback.setResultRemoveCopy(getRemTime(makeList(3))));
-
-
-    }
-
-    @Override
-    public void calculateSearchArray() {
-        executor.execute(() -> callback.setResultSearchArray(getSearchTime(makeList(1))));
-
-
-    }
-
-    @Override
-    public void calculateSearchLinked() {
-        executor.execute(() -> callback.setResultSearchLinked(getSearchTime(makeList(2))));
-
-
-    }
-
-    @Override
-    public void calculateSearchCopy() {
-        executor.execute(() -> callback.setResultSearchCopy(getSearchTime(makeList(3))));
-
-    }
-
-    @Override
-    public void onDestroy() {
+        }
         executor.shutdown();
     }
+
+    public class Calculator implements Runnable {
+        private Integer operationKind;
+        private Integer listKind;
+
+        public Calculator(Integer operationKind, Integer listKind) {
+            this.operationKind = operationKind;
+            this.listKind = listKind;
+        }
+
+        public void run() {
+            List<Byte> list = makeList(listKind);
+            String time = makeOperation(operationKind, list);
+            String flag = "" + operationKind + listKind;
+            callback.setResult(time, flag);
+        }
+    }
+
+    private String makeOperation(Integer operationKind, List<Byte> list) {
+        switch (operationKind) {
+            case 0:
+                return getAddTime(list);
+            case 1:
+                return getRemoveTime(list);
+            case 2:
+                return getSearchTime(list);
+            default:
+                return "";
+        }
+    }
+
 }

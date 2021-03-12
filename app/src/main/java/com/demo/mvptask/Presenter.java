@@ -1,7 +1,7 @@
 package com.demo.mvptask;
 
 public class Presenter implements MainContract.Presenter, MainContract.Callback {
-    private final MainContract.View view;
+    private MainContract.View view;
     private final Repository repository;
 
     public Presenter(MainContract.View view) {
@@ -11,75 +11,28 @@ public class Presenter implements MainContract.Presenter, MainContract.Callback 
 
     @Override
     public void calculate() {
-        setResultAddArray("");
-        setResultAddLinked("");
-        setResultAddCopy("");
-        setResultRemoveArray("");
-        setResultRemoveLinked("");
-        setResultRemoveCopy("");
-        setResultSearchArray("");
-        setResultSearchLinked("");
-        setResultSearchCopy("");
-        repository.onStartExecutor();
-        repository.calculateAddArray();
-        repository.calculateAddLinked();
-        repository.calculateAddCopy();
-        repository.calculateRemoveArray();
-        repository.calculateRemoveLinked();
-        repository.calculateRemoveCopy();
-        repository.calculateSearchArray();
-        repository.calculateSearchLinked();
-        repository.calculateSearchCopy();
-        repository.onDestroy();
-
+        clearTxtCells();
+        repository.calculate();
     }
 
+    // Clear textView's result cells before calculating
+    private void clearTxtCells() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                setResult("", "" + i + j);
+            }
 
-
-    @Override
-    public void setResultAddArray(String result) {
-        view.setResultAddArray(result);
+        }
     }
 
     @Override
-    public void setResultAddLinked(String result) {
-        view.setResultAddLinked(result);
+    public void setResult(String result, String flag) {
+        view.setResult(result, flag);
     }
+
 
     @Override
-    public void setResultAddCopy(String result) {
-        view.setResultAddCopy(result);
+    public void onDestroy() {
+        view = null;
     }
-
-    @Override
-    public void setResultRemoveArray(String result) {
-        view.setResultRemoveArray(result);
-    }
-
-    @Override
-    public void setResultRemoveLinked(String result) {
-        view.setResultRemoveLinked(result);
-    }
-
-    @Override
-    public void setResultRemoveCopy(String result) {
-        view.setResultRemoveCopy(result);
-    }
-
-    @Override
-    public void setResultSearchArray(String result) {
-        view.setResultSearchArray(result);
-    }
-
-    @Override
-    public void setResultSearchLinked(String result) {
-        view.setResultSearchLinked(result);
-    }
-
-    @Override
-    public void setResultSearchCopy(String result) {
-        view.setResultSearchCopy(result);
-    }
-
-
 }

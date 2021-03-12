@@ -9,22 +9,22 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements MainContract.View, MainContract.Callback {
     private final MainContract.Presenter presenter = new Presenter(this);
-    private TextView addResArr, addResLink, addResCopy, remResArr, remResLink, remResCopy, searchResArr, searchResLink, searchResCopy;
+    private TextView txtArrayAddMid, txtLinkedAddMid, txtCopyAddMid, txtArrayRemoveMid, txtLinkedRemoveMid, txtCopyRemoveMid, txtArraySearch, txtLinkedSearch, txtCopySearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        addResArr = findViewById(R.id.add_mid_result_array);
-        addResLink = findViewById(R.id.add_mid_result_linked);
-        addResCopy = findViewById(R.id.add_mid_result_copy);
-        remResArr = findViewById(R.id.remove_mid_result_array);
-        remResLink = findViewById(R.id.remove_mid_result_linked);
-        remResCopy = findViewById(R.id.remove_mid_result_copy);
-        searchResArr = findViewById(R.id.search_result_array);
-        searchResLink = findViewById(R.id.search_result_linked);
-        searchResCopy = findViewById(R.id.search_result_copy);
+        txtArrayAddMid = findViewById(R.id.add_mid_result_array);
+        txtLinkedAddMid = findViewById(R.id.add_mid_result_linked);
+        txtCopyAddMid = findViewById(R.id.add_mid_result_copy);
+        txtArrayRemoveMid = findViewById(R.id.remove_mid_result_array);
+        txtLinkedRemoveMid = findViewById(R.id.remove_mid_result_linked);
+        txtCopyRemoveMid = findViewById(R.id.remove_mid_result_copy);
+        txtArraySearch = findViewById(R.id.search_result_array);
+        txtLinkedSearch = findViewById(R.id.search_result_linked);
+        txtCopySearch = findViewById(R.id.search_result_copy);
         Button button = findViewById(R.id.calculate);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -35,47 +35,53 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
-    public void setResultAddArray(String result) {
-        runOnUiThread(() -> addResArr.setText(result));
+    public void setResult(String result, String flag) {
+        runOnUiThread(() -> {
+            switch (flag) {
+                case "00":
+                    txtArrayAddMid.setText(result);
+                    break;
+
+                case "01":
+                    txtLinkedAddMid.setText(result);
+                    break;
+
+                case "02":
+                    txtCopyAddMid.setText(result);
+                    break;
+
+                case "10":
+                    txtArrayRemoveMid.setText(result);
+                    break;
+
+                case "11":
+                    txtLinkedRemoveMid.setText(result);
+                    break;
+
+                case "12":
+                    txtCopyRemoveMid.setText(result);
+                    break;
+
+                case "20":
+                    txtArraySearch.setText(result);
+                    break;
+
+                case "21":
+                    txtLinkedSearch.setText(result);
+                    break;
+
+                case "22":
+                    txtCopySearch.setText(result);
+                    break;
+            }
+        });
     }
 
-    @Override
-    public void setResultAddLinked(String result) {
-        runOnUiThread(() -> addResLink.setText(result));
-    }
 
     @Override
-    public void setResultAddCopy(String result) {
-        runOnUiThread(() -> addResCopy.setText(result));
-    }
-
-    @Override
-    public void setResultRemoveArray(String result) {
-        runOnUiThread(() -> remResArr.setText(result));
-    }
-
-    @Override
-    public void setResultRemoveLinked(String result) {
-        runOnUiThread(() -> remResLink.setText(result));
-    }
-
-    @Override
-    public void setResultRemoveCopy(String result) {
-        runOnUiThread(() -> remResCopy.setText(result));
-    }
-
-    @Override
-    public void setResultSearchArray(String result) {
-        runOnUiThread(() -> searchResArr.setText(result));
-    }
-
-    @Override
-    public void setResultSearchLinked(String result) {
-        runOnUiThread(() -> searchResLink.setText(result));
-    }
-
-    @Override
-    public void setResultSearchCopy(String result) {
-        runOnUiThread(() -> searchResCopy.setText(result));
+    protected void onDestroy() {
+        //Delete the link to the MainActivity
+        presenter.onDestroy();
+        super.onDestroy();
     }
 }
