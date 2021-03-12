@@ -52,7 +52,7 @@ public class Repository implements MainContract.Repository {
     // Make the required list
     private List<Byte> makeList(int listKind) {
         List<Byte> list;
-        int size = 5000000;
+        int size = 10000000;
         switch (listKind) {
             case 0:
                 list = new ArrayList<>(Collections.nCopies(size, (byte) 1));
@@ -72,7 +72,7 @@ public class Repository implements MainContract.Repository {
 
     @Override
     public void calculate() {
-        executor = Executors.newFixedThreadPool(9);
+        executor = Executors.newFixedThreadPool(4);
         for (int operationKind = 0; operationKind < 3; operationKind++) {
             for (int listKind = 0; listKind < 3; listKind++) {
                 executor.execute(new Calculator(operationKind, listKind));
